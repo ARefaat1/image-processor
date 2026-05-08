@@ -52,20 +52,13 @@ def pipeline_a(img_gray):
 
 def pipeline_b(img_gray):
     """
-    Pipeline B: CLAHE + Laplacian-based sharpening + Median noise reduction.
+    Pipeline B: Laplacian-based sharpening.
     """
-    # Step 1: CLAHE (Contrast Limited Adaptive Histogram Equalization)
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
-    enhanced = clahe.apply(img_gray)
+    # Laplacian sharpening
+    laplacian = cv2.Laplacian(img_gray, cv2.CV_64F)
+    sharpened = cv2.convertScaleAbs(img_gray.astype(np.float64) - laplacian)
 
-    # Step 2: Laplacian sharpening
-    laplacian = cv2.Laplacian(enhanced, cv2.CV_64F)
-    sharpened = cv2.convertScaleAbs(enhanced.astype(np.float64) - laplacian)
-
-    # Step 3: Median filter
-    result = cv2.medianBlur(sharpened, 3)
-
-    return result
+    return sharpened
 
 
 # ─────────────────────────────────────────────
